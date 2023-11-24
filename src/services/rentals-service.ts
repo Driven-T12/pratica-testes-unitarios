@@ -28,6 +28,13 @@ async function getRentalById(rentalId: number) {
   return rental;
 }
 
+async function finishRental(rentalId: number) {
+  const rental = await rentalsRepository.getRentalById(rentalId);
+  if (!rental) throw notFoundError("Rental not found.");
+
+  await rentalsRepository.finishRental(rentalId);
+}
+
 async function createRental(rentalInput: RentalInput) {
   const { userId, moviesId } = rentalInput;
 
@@ -37,13 +44,6 @@ async function createRental(rentalInput: RentalInput) {
 
   const rental = await rentalsRepository.createRental(rentalInput);
   return rental;
-}
-
-async function finishRental(rentalId: number) {
-  const rental = await rentalsRepository.getRentalById(rentalId);
-  if (!rental) throw notFoundError("Rental not found.");
-
-  await rentalsRepository.finishRental(rentalId);
 }
 
 async function getUserForRental(userId: number) {
